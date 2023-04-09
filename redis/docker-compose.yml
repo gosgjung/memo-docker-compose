@@ -1,0 +1,16 @@
+version: '3'
+services:
+  rabbitmq-temp:
+    container_name: rabbitmq-temp
+    image: rabbitmq:3.8-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15692:15692
+    environment:
+      RABBITMQ_DEFAULT_USER: mqadmin
+      RABBITMQ_DEFAULT_PASS: 1111
+      RABBITMQ_DEFAULT_VHOST: /
+networks:
+  my-network:
+    driver: bridge
