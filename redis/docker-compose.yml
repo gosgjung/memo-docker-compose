@@ -1,16 +1,30 @@
 version: '3'
 services:
-  rabbitmq-temp:
-    container_name: rabbitmq-temp
-    image: rabbitmq:3.8-management
+  redis-temp:
+    image: redis:7.0.2-alpine
+    command: redis-server --port 6379
+    #    container_name: redis-temp
+    hostname: redis-normal
+    labels:
+      - "name=redis"
+      - "mode=standalone"
     ports:
-      - 5672:5672
-      - 15672:15672
-      - 15692:15692
+      - 36379:6379
+    links:
+      - redis-commander-temp
+    networks:
+      - default
+      - my-network 
+  redis-commander-temp:
+    image: rediscommander/redis-commander:latest
+    #    container_name: redis-commander
+    hostname: redis-commander
+    restart: always
     environment:
-      RABBITMQ_DEFAULT_USER: mqadmin
-      RABBITMQ_DEFAULT_PASS: 1111
-      RABBITMQ_DEFAULT_VHOST: /
+      - REDIS_HOSTS=redis-normal
+    #      - REDIS_HOST=redis-normal:redis:16379
+    ports:
+      - 38081:8081
 networks:
   my-network:
     driver: bridge
